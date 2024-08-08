@@ -1,22 +1,40 @@
 pipeline {
-    agent any
-
-    tools {
-        // Install the Maven version configured as "M3" and add it to the path.
-        maven "MAVEN_HOME"
+  agent any
+  tools { 
+        maven 'MAVEN_HOME' 
     }
 
-    stages {
-        stage('Build') {
-            steps {
-                // Get some code from a GitHub repository
-                git 'https://github.com/jglick/simple-maven-project-with-tests.git'
+  stages
+  {
+    stage('Build')
+    {
+      steps
+      {
+        //checkout source code from repository
+        echo 'hello world'
 
-            
-
-                // To run Maven on a Windows agent, use
-                bat "mvn -Dmaven.test.failure.ignore=true clean package"
-            }
-            }
-        }
+        //build application using maven
+        bat 'mvn clean'
+      }
     }
+
+    stage('Test')
+    {
+      steps
+      {
+        //execute demo test cases
+        bat 'mvn test'
+
+        //check if any test failed
+        
+      }
+    }
+    stage('Cleanup')
+    {
+      steps
+      {
+        cleanWs()
+      }
+    }
+  }
+}
