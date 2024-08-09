@@ -1,40 +1,25 @@
 pipeline {
-  agent any
-  tools { 
-        maven 'MAVEN_HOME' 
+    agent any
+    stages {
+          stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Build'){
+            steps{
+                bat 'mvn clean install'
+            }
+        }
+        stage('Test'){
+            steps{
+                bat 'mvn test'
+            }
+        }
+         stage('Clean Up') {
+            steps {
+                bat 'rmdir /s /q target'
+            }
+        }
     }
-
-  stages
-  {
-    stage('Build')
-    {
-      steps
-      {
-        //checkout source code from repository
-        echo 'hello world'
-
-        //build application using maven
-        bat 'mvn clean'
-      }
-    }
-
-    stage('Test')
-    {
-      steps
-      {
-        //execute demo test cases
-        bat 'mvn test'
-
-        //check if any test failed
-        
-      }
-    }
-    stage('Cleanup')
-    {
-      steps
-      {
-        cleanWs()
-      }
-    }
-  }
 }
